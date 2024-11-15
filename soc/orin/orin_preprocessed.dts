@@ -1,0 +1,154 @@
+# 1 "./orin/orin_mcp251xfd_overlay.dts"
+# 1 "<built-in>"
+# 1 "<command-line>"
+# 1 "./orin/orin_mcp251xfd_overlay.dts"
+# 11 "./orin/orin_mcp251xfd_overlay.dts"
+/dts-v1/;
+/plugin/;
+
+# 1 "./tegra/kernel-include/dt-common/jetson/tegra234-p3737-0000-p3701-0000.h" 1
+# 21 "./tegra/kernel-include/dt-common/jetson/tegra234-p3737-0000-p3701-0000.h"
+# 1 "./tegra/kernel-include/dt-bindings/gpio/tegra234-gpio.h" 1
+# 20 "./tegra/kernel-include/dt-bindings/gpio/tegra234-gpio.h"
+# 1 "./tegra/kernel-include/dt-bindings/gpio/gpio.h" 1
+# 21 "./tegra/kernel-include/dt-bindings/gpio/tegra234-gpio.h" 2
+# 22 "./tegra/kernel-include/dt-common/jetson/tegra234-p3737-0000-p3701-0000.h" 2
+# 15 "./orin/orin_mcp251xfd_overlay.dts" 2
+# 1 "./tegra/kernel-include/dt-bindings/pinctrl/pinctrl-tegra.h" 1
+# 16 "./orin/orin_mcp251xfd_overlay.dts" 2
+# 1 "./tegra/kernel-include/dt-bindings/gpio/tegra-gpio.h" 1
+# 17 "./orin/orin_mcp251xfd_overlay.dts" 2
+# 1 "./tegra/kernel-include/dt-bindings/interrupt-controller/irq.h" 1
+# 18 "./orin/orin_mcp251xfd_overlay.dts" 2
+
+
+/ {
+ overlay-name = "Westwell MCP2518FD";
+ jetson-header-name = "Jetson 40pin Header";
+ compatible = "nvidia,p3737-0000+p3701-0000", "nvidia,p3737-0000+p3701-0004", "nvidia,p3737-0000+p3701-0005", "nvidia,p3737-0000+p3701-0008";
+
+ fragment@0 {
+  target-path = "/spi@3210000/spi@0";
+  __overlay__ {
+   status = "disabled";
+  };
+ };
+
+ fragment@1{
+  target-path = "/spi@3210000/spi@1";
+  __overlay__ {
+   status = "disabled";
+  };
+ };
+
+ fragment@2 {
+  target-path = "/";
+  __overlay__ {
+   clocks {
+    mcp2518fd_osc: mcp2518fd_osc {
+     compatible = "fixed-clock";
+     #clock-cells = <0x0>;
+     clock-frequency = <20000000>;
+     clock-accuracy = <10>;
+     clock-output-names = "mcp2518fd_osc";
+     status = "okay";
+    };
+   };
+  };
+ };
+
+ fragment@3 {
+  target = <&spi0>;
+  __overlay__ {
+
+   #address-cells = <1>;
+   #size-cells = <0>;
+   can0: can@0 {
+    compatible = "microchip,mcp2518fd";
+    status = "okay";
+
+    reg = <0x0>;
+    clocks = <&mcp2518fd_osc>;
+    interrupt-parent = <&tegra_main_gpio>;
+    interrupts = <((7 * 8) + 7) 0x00000008>;
+    spi-max-frequency = <20000000>;
+    pinctrl-names = "default";
+       pinctrl-0 = <&mcp251xfd_spi>;
+    controller-data {
+     nvidia,enable-hw-based-cs;
+     nvidia,cs-setup-clk-count = <0xF>;
+     nvidia,cs-hold-clk-count = <0xF>;
+     nvidia,tx-clk-tap-delay = <0x7>;
+     nvidia,rx-clk-tap-delay = <0x0>;
+    };
+   };
+  };
+ };
+
+ fragment@4 {
+  target = <&pinmux>;
+  __overlay__ {
+   mcp251xfd_spi: exp-header-pinmux {
+
+    hdr40-pin12 {
+     nvidia,pins = "soc_gpio41_ph7";
+     nvidia,function = "rsvd2";
+     nvidia,pull = <2>;
+     nvidia,tristate = <0>;
+     nvidia,enable-input = <1>;
+    };
+    hdr40-pin19 {
+     nvidia,pins = "spi1_mosi_pz5";
+     nvidia,function = "spi1";
+     nvidia,pull = <1>;
+     nvidia,tristate = <0>;
+     nvidia,enable-input = <1>;
+    };
+    hdr40-pin21 {
+     nvidia,pins = "spi1_miso_pz4";
+     nvidia,function = "spi1";
+     nvidia,pull = <1>;
+     nvidia,tristate = <0>;
+     nvidia,enable-input = <1>;
+    };
+    hdr40-pin23 {
+     nvidia,pins = "spi1_sck_pz3";
+     nvidia,function = "spi1";
+     nvidia,pull = <1>;
+     nvidia,tristate = <0>;
+     nvidia,enable-input = <1>;
+    };
+
+    hdr40-pin24 {
+     nvidia,pins = "spi1_cs0_pz6";
+     nvidia,function = "spi1";
+     nvidia,pull = <0>;
+     nvidia,tristate = <0>;
+     nvidia,enable-input = <0>;
+    };
+
+    hdr40-pin26 {
+     nvidia,pins = "spi1_cs1_pz7";
+     nvidia,function = "spi1";
+     nvidia,pull = <0>;
+     nvidia,tristate = <0>;
+     nvidia,enable-input = <0>;
+    };
+   };
+  };
+ };
+
+ fragment@5 {
+  target = <&tegra_main_gpio>;
+  __overlay__ {
+
+   mcp2518fd_int {
+    gpio-hog;
+    input;
+    gpios = <((7 * 8) + 7) 0>;
+    label = "mcp2518fd_int";
+   };
+  };
+ };
+
+};
