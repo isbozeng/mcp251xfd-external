@@ -89,20 +89,13 @@
   target = <&pinmux>;
   __overlay__ {
    mcp251xfd_spi: exp-header-pinmux {
-
-    hdr40-pin12 {
-     nvidia,pins = "soc_gpio41_ph7";
-     nvidia,function = "rsvd2";
-     nvidia,pull = <2>;
-     nvidia,tristate = <0>;
-     nvidia,enable-input = <1>;
-    };
+# 95 "./orin/orin_mcp251xfd_overlay.dts"
     hdr40-pin19 {
      nvidia,pins = "spi1_mosi_pz5";
      nvidia,function = "spi1";
      nvidia,pull = <1>;
      nvidia,tristate = <0>;
-     nvidia,enable-input = <1>;
+     nvidia,enable-input = <0>;
     };
     hdr40-pin21 {
      nvidia,pins = "spi1_miso_pz4";
@@ -116,7 +109,7 @@
      nvidia,function = "spi1";
      nvidia,pull = <1>;
      nvidia,tristate = <0>;
-     nvidia,enable-input = <1>;
+     nvidia,enable-input = <0>;
     };
 
     hdr40-pin24 {

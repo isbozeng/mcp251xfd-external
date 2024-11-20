@@ -84,20 +84,20 @@
 		target = <&pinmux>;
 		__overlay__ {		
 			mcp251xfd_spi: exp-header-pinmux {
-				/* mcp251xfd_spi /intr */
+				/* mcp251xfd_spi /intr 
 				hdr40-pin12 {
 					nvidia,pins = HDR40_PIN12;
 					nvidia,function = "rsvd2";
 					nvidia,pull = <TEGRA_PIN_PULL_UP>;
 					nvidia,tristate = <TEGRA_PIN_DISABLE>;
 					nvidia,enable-input = <TEGRA_PIN_ENABLE>;
-				};				
+				};		*/		
 				hdr40-pin19 {
 					nvidia,pins = HDR40_PIN19;
 					nvidia,function = HDR40_SPI;
 					nvidia,pull = <TEGRA_PIN_PULL_DOWN>;
 					nvidia,tristate = <TEGRA_PIN_DISABLE>;
-					nvidia,enable-input = <TEGRA_PIN_ENABLE>;
+					nvidia,enable-input = <TEGRA_PIN_DISABLE>;
 				};
 				hdr40-pin21 {
 					nvidia,pins = HDR40_PIN21;
@@ -111,7 +111,7 @@
 					nvidia,function = HDR40_SPI;
 					nvidia,pull = <TEGRA_PIN_PULL_DOWN>;
 					nvidia,tristate = <TEGRA_PIN_DISABLE>;
-					nvidia,enable-input = <TEGRA_PIN_ENABLE>;
+					nvidia,enable-input = <TEGRA_PIN_DISABLE>;
 				};
 				/* HDR40_SPI.cs0 */
 				hdr40-pin24 {

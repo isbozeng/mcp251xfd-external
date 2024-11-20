@@ -40,6 +40,8 @@
 /* SoC function name for UART interface on 40-pin header pins 8, 10, 11 and 36 */
 #define HDR40_UART	"uarta"
 
+#define HDR40_SPI_3	"spi3"
+
 /* SoC pin name definitions for 40-pin header */
 #define HDR40_PIN7	"soc_gpio59_pac6"
 #define HDR40_PIN11	"uart1_rts_pr4"
