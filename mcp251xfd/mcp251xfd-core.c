@@ -2378,7 +2378,11 @@ static int mcp251xfd_open(struct net_device *ndev)
 	struct mcp251xfd_priv *priv = netdev_priv(ndev);
 	const struct spi_device *spi = priv->spi;
 	int err;
-
+	err = pm_runtime_get_sync(spi->controller->dev.parent);
+	if (err < 0) {
+		pm_runtime_put_noidle(spi->controller->dev.parent);
+		return err;
+	}
 	err = pm_runtime_get_sync(ndev->dev.parent);
 	if (err < 0) {
 		pm_runtime_put_noidle(ndev->dev.parent);
@@ -2437,6 +2441,7 @@ static int mcp251xfd_open(struct net_device *ndev)
 static int mcp251xfd_stop(struct net_device *ndev)
 {
 	struct mcp251xfd_priv *priv = netdev_priv(ndev);
+	const struct spi_device *spi = priv->spi;
 
 	netif_stop_queue(ndev);
 	mcp251xfd_chip_interrupts_disable(priv);
@@ -2448,7 +2453,7 @@ static int mcp251xfd_stop(struct net_device *ndev)
 	close_candev(ndev);
 
 	pm_runtime_put(ndev->dev.parent);
-
+	pm_runtime_put(spi->controller->dev.parent);
 	return 0;
 }
 
@@ -2578,7 +2583,7 @@ mcp251xfd_register_get_dev_id(const struct mcp251xfd_priv *priv,
  out_kfree_buf_rx:
 	kfree(buf_rx);
 
-	return err;
+	return 0;
 }
 
 #define MCP251XFD_QUIRK_ACTIVE(quirk) \
